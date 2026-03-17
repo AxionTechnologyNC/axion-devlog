@@ -71,7 +71,7 @@ void App::beginFrame()
 {
     processSystemInput();
 
-    glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
+    glClearColor(0.19f, 0.19f, 0.19f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
