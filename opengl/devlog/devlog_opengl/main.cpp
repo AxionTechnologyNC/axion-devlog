@@ -1,15 +1,14 @@
-#include "pch.h"
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
+﻿#include "pch.h"
+
+#include "app/App.h"
+#include "scenes/CubeScene.h"
 
 int main()
 {
-	if (!glfwInit()) return -1;
+    App app(1280, 720, "Axion Devlog - OpenGL");
+    if (!app.init()) return -1;
 
-	// request OpenGL 3.3 Core
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    app.setScene(std::make_unique<CubeScene>());
 
-	return 0;
+	return app.run();
 }
