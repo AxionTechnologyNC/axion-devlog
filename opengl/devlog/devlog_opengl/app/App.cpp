@@ -4,6 +4,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "scenes/IScene.h"
+
 App::App(int width, int height, std::string title)
     : width_(width),
     height_(height),
@@ -12,6 +14,8 @@ App::App(int width, int height, std::string title)
 
 App::~App()
 {
+    shutdownScene();
+
     if (window_ != nullptr)
     {
         glfwDestroyWindow(window_);
@@ -60,6 +64,52 @@ bool App::init()
     printContextInfo();
 
     return true;
+}
+
+void App::setScene(std::unique_ptr<IScene> scene)
+{
+    shutdownScene();
+    scene_ = std::move(scene);
+}
+
+int App::run()
+{
+    if (window_ == nullptr) {
+        std::cerr << "App::run() called before App::init()\n";
+        return -1;
+    }
+
+    if (!scene_) {
+        std::cerr << "No active scene set for App\n";
+        return -1;
+    }
+
+    if (!scene_->init()) {
+        std::cerr << "Failed to initialize active scene\n";
+        return -1;
+    }
+
+    scene_->onResize(width_, height_);
+
+    while (isRunning())
+    {
+        beginFrame();
+
+        scene_->update(time(), aspectRatio());
+        scene_->render();
+
+        endFrame();
+    }
+
+    shutdownScene();
+    return 0;
+}
+
+void App::close()
+{
+    if (window_ != nullptr) {
+        glfwSetWindowShouldClose(window_, true);
+    }
 }
 
 bool App::isRunning() const
@@ -118,6 +168,10 @@ void App::framebufferSizeCallback(GLFWwindow* window, int width, int height)
     {
         app->width_ = width;
         app->height_ = height;
+
+        if (app->scene_) {
+            app->scene_->onResize(width, height);
+        }
     }
 }
 
@@ -144,4 +198,12 @@ void App::printContextInfo() const
     std::cout << "Renderer : " << (renderer ? reinterpret_cast<const char*>(renderer) : "unknown") << '\n';
     std::cout << "Version  : " << (version ? reinterpret_cast<const char*>(version) : "unknown") << '\n';
     std::cout << "GLSL     : " << (glsl ? reinterpret_cast<const char*>(glsl) : "unknown") << '\n';
+}
+
+void App::shutdownScene()
+{
+    if (scene_) {
+        scene_->shutdown();
+        scene_.reset();
+    }
 }

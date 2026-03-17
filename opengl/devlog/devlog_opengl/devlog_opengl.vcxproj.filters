@@ -31,6 +31,12 @@
     <Filter Include="Source Files\utils">
       <UniqueIdentifier>{806e1369-b50b-4176-977e-25759f3129cd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\scene">
+      <UniqueIdentifier>{becdd28e-d193-484e-83e8-e7e1434b9632}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene">
+      <UniqueIdentifier>{992fdbf8-1b66-464f-977a-96742f289954}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -63,6 +69,9 @@
     <ClCompile Include="graphics\Image.cpp">
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="scenes\CubeScene.cpp">
+      <Filter>Source Files\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -85,6 +94,12 @@
     </ClInclude>
     <ClInclude Include="graphics\Image.h">
       <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="scenes\IScene.h">
+      <Filter>Header Files\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scenes\CubeScene.h">
+      <Filter>Header Files\scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

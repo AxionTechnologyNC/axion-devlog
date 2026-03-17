@@ -10,3 +10,5 @@
 #include <cstring>
 #include <fstream>
 #include <cstdint>
+#include <vector>
+#include <memory>

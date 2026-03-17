@@ -1,8 +1,10 @@
 #pragma once
 
+#include <memory>
 #include <string>
 
 struct GLFWwindow;
+class IScene;
 
 class App
 {
@@ -17,6 +19,11 @@ public:
     App& operator=(App&&) = delete;
 
     bool init();
+
+    void setScene(std::unique_ptr<IScene> scene);
+
+    int run();
+    void close();
 
     bool isRunning() const;
 
@@ -36,6 +43,7 @@ private:
 
     void processSystemInput();
     void printContextInfo() const;
+    void shutdownScene();
 
 private:
     GLFWwindow* window_ = nullptr;
@@ -43,4 +51,6 @@ private:
     int width_ = 0;
     int height_ = 0;
     std::string title_;
+
+    std::unique_ptr<IScene> scene_;
 };
