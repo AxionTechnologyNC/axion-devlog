@@ -35,7 +35,11 @@ bool App::init()
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    // Default: modern OpenGL pipeline
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    // Temporary fallback for legacy text rendering.
+    // Uncomment only if old immediate-mode text is needed.
+    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -52,6 +56,12 @@ bool App::init()
     glfwMakeContextCurrent(window_);
     glfwSetWindowUserPointer(window_, this);
     glfwSetFramebufferSizeCallback(window_, framebufferSizeCallback);
+    glfwSetCursorPosCallback(window_, cursorPosCallback);
+    glfwSetScrollCallback(window_, scrollCallback);
+    glfwSetKeyCallback(window_, keyCallback);
+
+    // free-look cam
+    glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
     {
@@ -91,11 +101,18 @@ int App::run()
 
     scene_->onResize(width_, height_);
 
+    float lastFrame = 0.0f;
+
     while (isRunning())
     {
+        const float currentTime = time();
+        const float deltaTime = currentTime - lastFrame;
+        lastFrame = currentTime;
+
         beginFrame();
 
-        scene_->update(time(), aspectRatio());
+        scene_->handleInput(window_, deltaTime);
+        scene_->update(currentTime, deltaTime, aspectRatio());
         scene_->render();
 
         endFrame();
@@ -164,8 +181,7 @@ void App::framebufferSizeCallback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 
     App* app = static_cast<App*>(glfwGetWindowUserPointer(window));
-    if (app != nullptr)
-    {
+    if (app != nullptr) {
         app->width_ = width;
         app->height_ = height;
 
@@ -175,13 +191,36 @@ void App::framebufferSizeCallback(GLFWwindow* window, int width, int height)
     }
 }
 
+void App::cursorPosCallback(GLFWwindow* window, double xpos, double ypos)
+{
+    App* app = static_cast<App*>(glfwGetWindowUserPointer(window));
+    if (app != nullptr && app->scene_) {
+        app->scene_->onMouseMove(xpos, ypos);
+    }
+}
+
+void App::scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    App* app = static_cast<App*>(glfwGetWindowUserPointer(window));
+    if (app != nullptr && app->scene_) {
+        app->scene_->onMouseScroll(xoffset, yoffset);
+    }
+}
+
+void App::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    App* app = static_cast<App*>(glfwGetWindowUserPointer(window));
+    if (app != nullptr && app->scene_) {
+        app->scene_->onKeyEvent(key, scancode, action, mods);
+    }
+}
+
 void App::processSystemInput()
 {
     if (window_ == nullptr)
         return;
 
-    if (glfwGetKey(window_, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    {
+    if (glfwGetKey(window_, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window_, true);
     }
 }

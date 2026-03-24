@@ -37,6 +37,18 @@
     <Filter Include="Source Files\scene">
       <UniqueIdentifier>{992fdbf8-1b66-464f-977a-96742f289954}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\camera">
+      <UniqueIdentifier>{ec73cfa0-9891-4b6e-9293-c1351f354894}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\camera">
+      <UniqueIdentifier>{2ad834bd-e132-4890-a18b-e5e250ae00fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ui">
+      <UniqueIdentifier>{f0eb7c17-2b90-40c8-ac2e-430b47bffa09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ui">
+      <UniqueIdentifier>{ec56c319-23a0-4547-8837-06576f6d5e58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -72,6 +84,12 @@
     <ClCompile Include="scenes\CubeScene.cpp">
       <Filter>Source Files\scene</Filter>
     </ClCompile>
+    <ClCompile Include="camera\FlyCamera.cpp">
+      <Filter>Source Files\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\HudTextRenderer.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -100,6 +118,12 @@
     </ClInclude>
     <ClInclude Include="scenes\CubeScene.h">
       <Filter>Header Files\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="camera\FlyCamera.h">
+      <Filter>Header Files\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\HudTextRenderer.h">
+      <Filter>Header Files\ui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
