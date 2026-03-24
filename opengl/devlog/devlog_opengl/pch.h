@@ -12,3 +12,5 @@
 #include <cstdint>
 #include <vector>
 #include <memory>
+#include <algorithm>
+#include <cmath>
